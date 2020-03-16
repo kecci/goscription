@@ -1,0 +1,44 @@
+version: "2.3"
+services:
+  web:
+    image: goscription
+    container_name: goscription_api
+    ports:
+      - 9090:9090
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    volumes:
+      - ./config.toml:/app/config.toml
+  mysql:
+    image: mysql:5.7 
+    container_name: goscription_mysql
+    command: mysqld --user=root
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=article
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=root
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+  
+  mysql_test:
+    image: mysql:5.7 
+    container_name: goscription_mysql_test
+    command: mysqld --user=root
+    ports:
+      - 33060:3306
+    environment:
+      - MYSQL_DATABASE=testing
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=root
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10

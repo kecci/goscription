@@ -1,0 +1,14 @@
+title="Configuration File for Goscription"
+debug=true
+contextTimeout="5"
+[server]
+  address= ":9090"
+[database]
+  host="mysql"
+  port="3306"
+  user="root"
+  pass="root"
+  name="article"
+[godaddy]
+  host="https://api.ote-godaddy.com"
+  authorization="sso-key authorizationCode"
