@@ -1,25 +1,25 @@
-package http
+package controller
 
 import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
 
-	"github.com/abyanjksatu/goscription/usecase"
+	"github.com/abyanjksatu/goscription/internal/service"
 	"github.com/labstack/echo/v4"
 )
 
-type domainHandler struct {
-	DUsecase usecase.DomainUsecase
+type domainController struct {
+	DUsecase service.DomainService
 }
 
-// InitDomainHandler will initialize the domain's HTTP handler
-func InitDomainHandler(e *echo.Echo, us usecase.DomainUsecase) {
-	handler := &domainHandler{
+// InitDomainController will initialize the domain's HTTP controller
+func InitDomainController(e *echo.Echo, us service.DomainService) {
+	controller := &domainController{
 		DUsecase: us,
 	}
-	e.GET("/domains", handler.GetDomains)
-	e.GET("/domains/available", handler.GetDomainsAvailable)
+	e.GET("/domains", controller.GetDomains)
+	e.GET("/domains/available", controller.GetDomainsAvailable)
 }
 
 // GetDomains godoc
@@ -33,7 +33,7 @@ func InitDomainHandler(e *echo.Echo, us usecase.DomainUsecase) {
 // @Failure 404 {object} ResponseError
 // @Failure 500 {object} ResponseError
 // @Router /domains [get]
-func (d *domainHandler) GetDomains(c echo.Context) error {
+func (d *domainController) GetDomains(c echo.Context) error {
 	request, _ := http.NewRequest("GET", "https://api.ote-godaddy.com/v1/domains", nil)
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Authorization", "sso-key 3mM44UaguLoR8V_S777TEwztnyJN8mQbAnGKD:7cMUQQQxaL3LpTpNoS9WqG")
@@ -62,7 +62,7 @@ func (d *domainHandler) GetDomains(c echo.Context) error {
 // @Failure 404 {object} ResponseError
 // @Failure 500 {object} ResponseError
 // @Router /domains/available [get]
-func (d *domainHandler) GetDomainsAvailable(c echo.Context) error {
+func (d *domainController) GetDomainsAvailable(c echo.Context) error {
 	domain := c.QueryParam("domain")
 	domainAvailableResponse, err := d.DUsecase.GetDomainAvailable(domain)
 

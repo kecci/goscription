@@ -6,9 +6,8 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"time"
 
-	// imported for Mysql driver
-	"github.com/abyanjksatu/goscription/internal/database/mysql"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -19,8 +18,7 @@ var (
 		Use:   "goscription",
 		Short: "Article Management CLI",
 	}
-	articleRepository mysql.ArticleRepository
-	dbConn            *sql.DB
+	dbConn *sql.DB
 )
 
 // Execute will run the CLI app of goscription
@@ -55,6 +53,12 @@ func initConfig() {
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 }
 
+// NewTimeOutContext is timeout duration
+func NewTimeOutContext() time.Duration {
+	timeoutContext := time.Duration(viper.GetInt("contextTimeout")) * time.Second
+	return timeoutContext
+}
+
 // NewDbConn generate new database connection
 func NewDbConn() (*sql.DB, error) {
 	// DATABASE
@@ -64,7 +68,6 @@ func NewDbConn() (*sql.DB, error) {
 	dbPass := viper.GetString(`database.pass`)
 	dbName := viper.GetString(`database.name`)
 	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
-	fmt.Println(connection)
 	val := url.Values{}
 	val.Add("parseTime", "1")
 	val.Add("loc", "Asia/Jakarta")
