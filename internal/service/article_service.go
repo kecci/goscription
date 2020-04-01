@@ -1,4 +1,4 @@
-package usecase
+package service
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 	"github.com/abyanjksatu/goscription/util"
 )
 
-//ArticleUsecase represent the usecase of the article
-type ArticleUsecase interface {
+//ArticleService represent the service of the article
+type ArticleService interface {
 	Fetch(ctx context.Context, cursor string, num int64) (res []models.Article, csr string, err error)
 	GetByID(ctx context.Context, id int64) (res models.Article, err error)
 	Update(ctx context.Context, ar *models.Article) (err error)
@@ -19,26 +19,26 @@ type ArticleUsecase interface {
 	Delete(ctx context.Context, id int64) (err error)
 }
 
-type articleUsecase struct {
+type articleService struct {
 	articleRepo    mysql.ArticleRepository
 	contextTimeout time.Duration
 }
 
-// NewArticleUsecase will create new an articleUsecase object representation of usecase.ArticleUsecase interface
-func NewArticleUsecase(a mysql.ArticleRepository, timeout time.Duration) ArticleUsecase {
+// NewArticleService will create new an articleService object representation of service.ArticleService interface
+func NewArticleService(a mysql.ArticleRepository, timeout time.Duration) ArticleService {
 	if a == nil {
 		panic("Article repository is nil")
 	}
 	if timeout == 0 {
 		panic("Timeout is empty")
 	}
-	return &articleUsecase{
+	return &articleService{
 		articleRepo:    a,
 		contextTimeout: timeout,
 	}
 }
 
-func (a *articleUsecase) Fetch(c context.Context, cursor string, num int64) (res []models.Article, nextCursor string, err error) {
+func (a *articleService) Fetch(c context.Context, cursor string, num int64) (res []models.Article, nextCursor string, err error) {
 	if num == 0 {
 		num = 10
 	}
@@ -54,7 +54,7 @@ func (a *articleUsecase) Fetch(c context.Context, cursor string, num int64) (res
 	return
 }
 
-func (a *articleUsecase) GetByID(c context.Context, id int64) (res models.Article, err error) {
+func (a *articleService) GetByID(c context.Context, id int64) (res models.Article, err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 
@@ -62,7 +62,7 @@ func (a *articleUsecase) GetByID(c context.Context, id int64) (res models.Articl
 	return
 }
 
-func (a *articleUsecase) Update(c context.Context, ar *models.Article) (err error) {
+func (a *articleService) Update(c context.Context, ar *models.Article) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 
@@ -70,14 +70,14 @@ func (a *articleUsecase) Update(c context.Context, ar *models.Article) (err erro
 	return a.articleRepo.Update(ctx, ar)
 }
 
-func (a *articleUsecase) GetByTitle(c context.Context, title string) (res models.Article, err error) {
+func (a *articleService) GetByTitle(c context.Context, title string) (res models.Article, err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 	res, err = a.articleRepo.GetByTitle(ctx, title)
 	return
 }
 
-func (a *articleUsecase) Store(c context.Context, m *models.Article) (err error) {
+func (a *articleService) Store(c context.Context, m *models.Article) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 	existedArticle, _ := a.GetByTitle(ctx, m.Title)
@@ -89,7 +89,7 @@ func (a *articleUsecase) Store(c context.Context, m *models.Article) (err error)
 	return
 }
 
-func (a *articleUsecase) Delete(c context.Context, id int64) (err error) {
+func (a *articleService) Delete(c context.Context, id int64) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 	existedArticle, err := a.articleRepo.GetByID(ctx, id)

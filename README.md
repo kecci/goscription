@@ -6,13 +6,15 @@ Goscription is a sample of template RESTful API gateway
 
 Some features & libraries used on this template:
 1. REST API (**labstack/echo**)
-2. Dependency Injection (**uber-go/dig**)
+2. Dependency Injection (**uber-go/fx**)
 3. Custom CLI (**spf13/cobra**)
 4. Custom Config File (**spf13/viper**)
-5. Migrations (**go-migrate**)
-6. Swagger API Docs Generator (**swaggo/swag**)
-7. Mock Generator (**vektra/mockery**)
-8. Dockerize an Application (**docker**)
+5. SQL Generator (**squirrel**)
+6. Migrations (**go-migrate**)
+7. Swagger API Docs Generator (**swaggo/swag**)
+8. Mock Generator (**vektra/mockery**)
+9. Custom Logger (**sirupsen/logrus**)
+10. Dockerize an Application (**docker**)
 
 ## Installation
 
@@ -50,66 +52,49 @@ $ make
 .
 ├── app
 │   ├── cmd
-│   │   ├── http.go
-│   │   └── root.go
 │   └── main.go
-├── config.toml
-├── docker-compose.yaml
-├── docs
-│   ├── docs.go
-│   ├── swagger.json
-│   └── swagger.yaml
 ├── internal
+│   ├── controller
 │   ├── database
 │   │   └── mysql
-│   │       ├── article.go
 │   │       └── migrations
-│   │           ├── 1_create_article.down.sql
-│   │           └── 1_create_article.up.sql
-│   └── http
-│       ├── article_handler.go
-│       ├── middleware
-│       └── server.go
+│   ├── middleware
+│   ├── outbound
+│   └── service
 ├── mocks
 ├── models
-├── usecase
 └── util
 ```
 
 ## Dependency Injection
-I found this library is very useful and you no need to generate anything. Just code.
+I found this library is very useful and you no need to generate anything. Just code. Very modular and clear layer.
 
-### uber-go/dig
-A reflection based dependency injection toolkit for Go.
+### uber-go/fx
+A dependency injection based application framework for Go.
 
 ```go
-package main
-
-func BuildContainer() *dig.Container {
-  container := dig.New()
-
-  container.Provide(NewConfig)
-  container.Provide(ConnectDatabase)
-  container.Provide(NewPersonRepository)
-  container.Provide(NewPersonService)
-  container.Provide(NewServer)
-
-  return container
+func main() {
+	fx.New(opts()).Run()
 }
 
-func main() {
-  container := BuildContainer()
-
-  err := container.Invoke(func(server *Server) {
-    server.Run()
-  })
-
-  if err != nil {
-    panic(err)
-  }
+func opts() fx.Option {
+	return fx.Options(
+		fx.Provide( 
+			NewTimeOutContext, 
+			NewDbConn, 
+		),
+		repository.Module, // Provide All Repository Module
+		service.Module, // Provide All Service Module
+		outbound.Module, // Provide All Outbound Module
+		server.Module, // Provide Runner/Stopper Server
+		fx.Invoke( // Invoke List of Controller
+      controller.InitFooController, 
+      controller.InitBarController,
+		),
+	)
 }
 ```
-For more information about uber-go/dig: https://github.com/uber-go/dig
+For more information about uber-go/fx: https://github.com/uber-go/fx
 
 ## Config Properties
 ### spf13/viper

@@ -1,6 +1,11 @@
 package util
 
-import "errors"
+import (
+	"errors"
+	"net/http"
+
+	"github.com/sirupsen/logrus"
+)
 
 var (
 	// ErrInternalServerError will throw if any the Internal Server Error happen
@@ -12,3 +17,22 @@ var (
 	// ErrBadParamInput will throw if the given request-body or params is not valid
 	ErrBadParamInput = errors.New("Given Param is not valid")
 )
+
+// GetStatusCode for handle status error
+func GetStatusCode(err error) int {
+	if err == nil {
+		return http.StatusOK
+	}
+
+	logrus.Error(err)
+	switch err {
+	case ErrInternalServerError:
+		return http.StatusInternalServerError
+	case ErrNotFound:
+		return http.StatusNotFound
+	case ErrConflict:
+		return http.StatusConflict
+	default:
+		return http.StatusInternalServerError
+	}
+}

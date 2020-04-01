@@ -1,4 +1,4 @@
-package http_test
+package controller_test
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	articleHttp "github.com/abyanjksatu/goscription/internal/http"
+	"github.com/abyanjksatu/goscription/internal/controller"
 	"github.com/abyanjksatu/goscription/mocks"
 	"github.com/abyanjksatu/goscription/models"
 	"github.com/abyanjksatu/goscription/util"
@@ -24,7 +24,7 @@ func TestFetch(t *testing.T) {
 	var mockArticle models.Article
 	err := faker.FakeData(&mockArticle)
 	assert.NoError(t, err)
-	mockUCase := new(mocks.ArticleUsecase)
+	mockUCase := new(mocks.ArticleService)
 	mockListArticle := make([]models.Article, 0)
 	mockListArticle = append(mockListArticle, mockArticle)
 	num := 1
@@ -37,7 +37,7 @@ func TestFetch(t *testing.T) {
 
 	rec := httptest.NewRecorder()
 
-	articleHttp.InitArticleHandler(e, mockUCase)
+	controller.InitArticleController(e, mockUCase)
 	e.ServeHTTP(rec, req)
 
 	responseCursor := rec.Header().Get("X-Cursor")
@@ -48,7 +48,7 @@ func TestFetch(t *testing.T) {
 }
 
 func TestFetchError(t *testing.T) {
-	mockUCase := new(mocks.ArticleUsecase)
+	mockUCase := new(mocks.ArticleService)
 	num := 1
 	cursor := "2"
 	mockUCase.On("Fetch", mock.Anything, cursor, int64(num)).Return(nil, "", util.ErrInternalServerError)
@@ -59,7 +59,7 @@ func TestFetchError(t *testing.T) {
 
 	rec := httptest.NewRecorder()
 
-	articleHttp.InitArticleHandler(e, mockUCase)
+	controller.InitArticleController(e, mockUCase)
 	e.ServeHTTP(rec, req)
 
 	responseCursor := rec.Header().Get("X-Cursor")
@@ -74,7 +74,7 @@ func TestGetByID(t *testing.T) {
 	err := faker.FakeData(&mockArticle)
 	assert.NoError(t, err)
 
-	mockUCase := new(mocks.ArticleUsecase)
+	mockUCase := new(mocks.ArticleService)
 	num := int(mockArticle.ID)
 	mockUCase.On("GetByID", mock.Anything, int64(num)).Return(mockArticle, nil)
 
@@ -84,7 +84,7 @@ func TestGetByID(t *testing.T) {
 
 	rec := httptest.NewRecorder()
 
-	articleHttp.InitArticleHandler(e, mockUCase)
+	controller.InitArticleController(e, mockUCase)
 	e.ServeHTTP(rec, req)
 
 	assert.Equal(t, http.StatusOK, rec.Code)
@@ -101,7 +101,7 @@ func TestStore(t *testing.T) {
 
 	tempMockArticle := mockArticle
 	tempMockArticle.ID = 0
-	mockUCase := new(mocks.ArticleUsecase)
+	mockUCase := new(mocks.ArticleService)
 
 	j, err := json.Marshal(tempMockArticle)
 	assert.NoError(t, err)
@@ -113,7 +113,7 @@ func TestStore(t *testing.T) {
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 
 	rec := httptest.NewRecorder()
-	articleHttp.InitArticleHandler(e, mockUCase)
+	controller.InitArticleController(e, mockUCase)
 	e.ServeHTTP(rec, req)
 
 	assert.Equal(t, http.StatusCreated, rec.Code)
@@ -125,7 +125,7 @@ func TestDelete(t *testing.T) {
 	err := faker.FakeData(&mockArticle)
 	assert.NoError(t, err)
 
-	mockUCase := new(mocks.ArticleUsecase)
+	mockUCase := new(mocks.ArticleService)
 	num := int(mockArticle.ID)
 	mockUCase.On("Delete", mock.Anything, int64(num)).Return(nil)
 
@@ -134,7 +134,7 @@ func TestDelete(t *testing.T) {
 	assert.NoError(t, err)
 
 	rec := httptest.NewRecorder()
-	articleHttp.InitArticleHandler(e, mockUCase)
+	controller.InitArticleController(e, mockUCase)
 	e.ServeHTTP(rec, req)
 
 	assert.Equal(t, http.StatusNoContent, rec.Code)
