@@ -1,4 +1,4 @@
-package usecase_test
+package service_test
 
 import (
 	"context"
@@ -9,9 +9,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
+	"github.com/abyanjksatu/goscription/internal/service"
 	"github.com/abyanjksatu/goscription/mocks"
 	"github.com/abyanjksatu/goscription/models"
-	"github.com/abyanjksatu/goscription/usecase"
 	"github.com/abyanjksatu/goscription/util"
 )
 
@@ -28,7 +28,7 @@ func TestFetch(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		mockArticleRepo.On("Fetch", mock.Anything, mock.AnythingOfType("string"),
 			mock.AnythingOfType("int64")).Return(mockListArtilce, "next-cursor", nil).Once()
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 		num := int64(1)
 		cursor := "12"
 		list, nextCursor, err := u.Fetch(context.TODO(), cursor, num)
@@ -45,7 +45,7 @@ func TestFetch(t *testing.T) {
 		mockArticleRepo.On("Fetch", mock.Anything, mock.AnythingOfType("string"),
 			mock.AnythingOfType("int64")).Return(nil, "", errors.New("Unexpexted Error")).Once()
 
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 		num := int64(1)
 		cursor := "12"
 		list, nextCursor, err := u.Fetch(context.TODO(), cursor, num)
@@ -69,7 +69,7 @@ func TestGetByID(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		mockArticleRepo.On("GetByID", mock.Anything, mock.AnythingOfType("int64")).Return(mockArticle, nil).Once()
 
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
 		a, err := u.GetByID(context.TODO(), mockArticle.ID)
 
@@ -82,7 +82,7 @@ func TestGetByID(t *testing.T) {
 	t.Run("error-failed", func(t *testing.T) {
 		mockArticleRepo.On("GetByID", mock.Anything, mock.AnythingOfType("int64")).Return(models.Article{}, errors.New("Unexpected")).Once()
 
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
 		a, err := u.GetByID(context.TODO(), mockArticle.ID)
 
@@ -108,7 +108,7 @@ func TestStore(t *testing.T) {
 		mockArticleRepo.On("GetByTitle", mock.Anything, mock.AnythingOfType("string")).Return(models.Article{}, util.ErrNotFound).Once()
 		mockArticleRepo.On("Store", mock.Anything, mock.AnythingOfType("*models.Article")).Return(nil).Once()
 
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
 		err := u.Store(context.TODO(), &tempMockArticle)
 
@@ -120,7 +120,7 @@ func TestStore(t *testing.T) {
 		existingArticle := mockArticle
 		mockArticleRepo.On("GetByTitle", mock.Anything, mock.AnythingOfType("string")).Return(existingArticle, nil).Once()
 
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
 		err := u.Store(context.TODO(), &mockArticle)
 
@@ -143,7 +143,7 @@ func TestDelete(t *testing.T) {
 
 		mockArticleRepo.On("Delete", mock.Anything, mock.AnythingOfType("int64")).Return(nil).Once()
 
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
 		err := u.Delete(context.TODO(), mockArticle.ID)
 
@@ -154,7 +154,7 @@ func TestDelete(t *testing.T) {
 	t.Run("article-is-not-exist", func(t *testing.T) {
 		mockArticleRepo.On("GetByID", mock.Anything, mock.AnythingOfType("int64")).Return(models.Article{}, nil).Once()
 
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
 		err := u.Delete(context.TODO(), mockArticle.ID)
 
@@ -165,7 +165,7 @@ func TestDelete(t *testing.T) {
 	t.Run("error-happens-in-db", func(t *testing.T) {
 		mockArticleRepo.On("GetByID", mock.Anything, mock.AnythingOfType("int64")).Return(models.Article{}, errors.New("Unexpected Error")).Once()
 
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
 		err := u.Delete(context.TODO(), mockArticle.ID)
 
@@ -187,7 +187,7 @@ func TestUpdate(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		mockArticleRepo.On("Update", mock.Anything, &mockArticle).Once().Return(nil)
 
-		u := usecase.NewArticleUsecase(mockArticleRepo, time.Second*2)
+		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
 		err := u.Update(context.TODO(), &mockArticle)
 		assert.NoError(t, err)

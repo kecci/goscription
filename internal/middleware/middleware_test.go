@@ -5,7 +5,7 @@ import (
 	test "net/http/httptest"
 	"testing"
 
-	"github.com/abyanjksatu/goscription/internal/http/middleware"
+	"github.com/abyanjksatu/goscription/internal/middleware"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
