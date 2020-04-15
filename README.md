@@ -7,13 +7,15 @@ Goscription is a sample of template RESTful API gateway
 Some features & libraries used on this template:
 1. REST API (**labstack/echo**)
 2. Dependency Injection (**uber-go/fx**)
-3. Custom CLI (**spf13/cobra**)
-4. Custom Config File (**spf13/viper**)
-5. Migrations (**go-migrate**)
-6. Swagger API Docs Generator (**swaggo/swag**)
-7. Mock Generator (**vektra/mockery**)
-8. Custom Logger (**sirupsen/logrus**)
-9. Dockerize an Application (**docker**)
+3. Message Streams: Pub/Sub, Kafka, RabbitMQ, etc (**ThreeDotsLabs/watermill**) [Soon]
+4. Custom CLI (**spf13/cobra**)
+5. Custom Config File (**spf13/viper**)
+6. SQL Generator (**squirrel**)
+7. Migrations (**go-migrate**)
+8. Swagger API Docs Generator (**swaggo/swag**)
+9. Mock Generator (**vektra/mockery**)
+10. Custom Logger (**sirupsen/logrus**)
+11. Dockerize an Application (**docker**)
 
 ## Installation
 
