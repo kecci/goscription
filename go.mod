@@ -23,10 +23,10 @@ require (
 	github.com/stretchr/testify v1.5.1
 	github.com/swaggo/echo-swagger v1.0.0
 	github.com/swaggo/swag v1.6.5
+	github.com/vektra/mockery v1.1.2 // indirect
 	go.uber.org/fx v1.11.0
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
 	golang.org/x/lint v0.0.0-20200130185559-910be7a94367 // indirect
 	golang.org/x/mod v0.2.0 // indirect
-	golang.org/x/tools v0.0.0-20200213224642-88e652f7a869 // indirect
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
 )

@@ -56,6 +56,7 @@ test-docker: mysql-test-up
 ## test-unit: run all unit test & lint
 .PHONY: test-unit
 test-unit:
+	@echo "Start: unit test"
 	@go test -v -short -race ./...
 	@echo "gofmt: start..."
 	@gofmt -l -e -d .
@@ -63,16 +64,22 @@ test-unit:
 	@echo "golint: start..."
 	@golint ./...
 	@echo "golint: done"
+	@echo "End: unit test"
 
 ## go-build: build to compile the project & swagger docs
 go-build:
 	@echo "Start: build "$(PROJECTNAME)" project"
-	@go build -o goscription app/main.go
+	@make test-unit
+	@make swagger-init
+	@make swagger-validate
+	@echo "Run: go build -o "$(PROJECTNAME)" app/main.go"
+	@go build -o "$(PROJECTNAME)" app/main.go
 	@echo "Done: "$(PROJECTNAME)" project has build"
 
 ## go-run: run project
 go-run:
 	@make go-build
+	@echo "Run "$(PROJECTNAME)" project"
 	./$(PROJECTNAME) http
 
 ## docker-build: dockerize the project
@@ -80,7 +87,7 @@ go-run:
 docker-build:
 	@make swagger-init
 	@make swagger-validate
-	@docker build . -t goscription:latest
+	@docker build . -t "$(PROJECTNAME)":latest
 
 ## docker-up: run docker compose up
 .PHONY: docker-up
@@ -96,13 +103,16 @@ docker-down:
 ## swagger-init: initialize swagger to folder ./docs
 .PHONY: swagger-init
 swagger-init:
+	@echo "Start: Initialize swagger"
 	@swag init -g app/main.go
-	@echo Done: initialize ./docs swagger
+	@echo "Done: initialize ./docs swagger"
 
 ## swagger-validate: validate swagger.yaml in folder ./docs
 .PHONY: swagger-validate
 swagger-validate:
+	@echo "Start: Validate swagger"
 	@swagger validate docs/swagger.yaml
+	@echo "Done: Validate swagger"
 
 ## migrate-prepare: prepare migrate the schema with mysql
 .PHONY: migrate-prepare

@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/abyanjksatu/goscription/internal/service"
-	"github.com/abyanjksatu/goscription/models"
 	"github.com/abyanjksatu/goscription/util"
 	"github.com/labstack/echo/v4"
 )
@@ -120,7 +119,7 @@ func (a *articleController) Store(c echo.Context) error {
 		return c.JSON(http.StatusUnprocessableEntity, err.Error())
 	}
 
-	article := models.Article{
+	articleParam := service.ArticleParam{
 		Title:   articleRequest.Title,
 		Content: articleRequest.Content,
 	}
@@ -130,12 +129,12 @@ func (a *articleController) Store(c echo.Context) error {
 		ctx = context.Background()
 	}
 
-	err = a.AService.Store(ctx, &article)
+	err = a.AService.Store(ctx, articleParam)
 	if err != nil {
 		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusCreated, article)
+	return c.JSON(http.StatusCreated, articleParam)
 }
 
 // Delete godoc
@@ -168,4 +167,48 @@ func (a *articleController) Delete(c echo.Context) error {
 	}
 
 	return c.NoContent(http.StatusNoContent)
+}
+
+// Update godoc
+// @Summary Update an Article
+// @Description Update an Article
+// @Tags articles
+// @Accept  json
+// @Produce  json
+// @Param article body ArticleRequest true "Article Body"
+// @Param id path int true "Article ID"
+// @Header 200 {string} Token "qwerty"
+// @Failure 400 {object} ResponseError
+// @Failure 404 {object} ResponseError
+// @Failure 500 {object} ResponseError
+// @Router /articles/{id} [put]
+func (a *articleController) Update(c echo.Context) error {
+	idP, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+	}
+
+	var ar ArticleRequest
+	err = c.Bind(&ar)
+	if err != nil {
+		return c.JSON(http.StatusUnprocessableEntity, err.Error())
+	}
+
+	articleParam := service.ArticleParam{
+		ID: int64(idP),
+		Title:   ar.Title,
+		Content: ar.Content,
+	}
+
+	ctx := c.Request().Context()
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	err = a.AService.Update(ctx, articleParam)
+	if err != nil {
+		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+	}
+
+	return c.JSON(http.StatusCreated, articleParam)
 }

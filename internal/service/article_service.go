@@ -13,10 +13,17 @@ import (
 type ArticleService interface {
 	Fetch(ctx context.Context, cursor string, num int64) (res []models.Article, csr string, err error)
 	GetByID(ctx context.Context, id int64) (res models.Article, err error)
-	Update(ctx context.Context, ar *models.Article) (err error)
+	Update(context.Context, ArticleParam) (err error)
 	GetByTitle(ctx context.Context, title string) (res models.Article, err error)
-	Store(context.Context, *models.Article) (err error)
+	Store(context.Context, ArticleParam) (err error)
 	Delete(ctx context.Context, id int64) (err error)
+}
+
+//ArticleParam is paramter for Store Param
+type ArticleParam struct {
+	ID int64 `json:"id"`
+	Title   string `json:"title" validate:"required"`
+	Content string `json:"content" validate:"required"`
 }
 
 type articleService struct {
@@ -62,12 +69,18 @@ func (a *articleService) GetByID(c context.Context, id int64) (res models.Articl
 	return
 }
 
-func (a *articleService) Update(c context.Context, ar *models.Article) (err error) {
+func (a *articleService) Update(c context.Context, ap ArticleParam) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 
-	ar.UpdatedAt = time.Now()
-	return a.articleRepo.Update(ctx, ar)
+	ar := models.Article{
+		ID: ap.ID,
+		Title: ap.Title,
+		Content: ap.Content,
+		UpdatedAt: time.Now(),
+	}
+
+	return a.articleRepo.Update(ctx, &ar)
 }
 
 func (a *articleService) GetByTitle(c context.Context, title string) (res models.Article, err error) {
@@ -77,15 +90,20 @@ func (a *articleService) GetByTitle(c context.Context, title string) (res models
 	return
 }
 
-func (a *articleService) Store(c context.Context, m *models.Article) (err error) {
+func (a *articleService) Store(c context.Context, p ArticleParam) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
-	existedArticle, _ := a.GetByTitle(ctx, m.Title)
+	existedArticle, _ := a.GetByTitle(ctx, p.Title)
 	if existedArticle != (models.Article{}) {
 		return util.ErrConflict
 	}
 
-	err = a.articleRepo.Store(ctx, m)
+	m := models.Article{
+		Title: p.Title,
+		Content: p.Content,
+	}
+
+	err = a.articleRepo.Store(ctx, &m)
 	return
 }
 
