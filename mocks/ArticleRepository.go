@@ -114,13 +114,13 @@ func (_m *ArticleRepository) Store(ctx context.Context, a *models.Article) error
 	return r0
 }
 
-// Update provides a mock function with given fields: ctx, _a1
-func (_m *ArticleRepository) Update(ctx context.Context, _a1 *models.Article) error {
-	ret := _m.Called(ctx, _a1)
+// Update provides a mock function with given fields: ctx, article
+func (_m *ArticleRepository) Update(ctx context.Context, article *models.Article) error {
+	ret := _m.Called(ctx, article)
 
 	var r0 error
 	if rf, ok := ret.Get(0).(func(context.Context, *models.Article) error); ok {
-		r0 = rf(ctx, _a1)
+		r0 = rf(ctx, article)
 	} else {
 		r0 = ret.Error(0)
 	}

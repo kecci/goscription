@@ -97,23 +97,28 @@ func TestGetByID(t *testing.T) {
 
 func TestStore(t *testing.T) {
 	mockArticleRepo := new(mocks.ArticleRepository)
+	mockArticleParam := service.ArticleParam{
+		Title:   "Hello",
+		Content: "Content",
+	}
+
 	mockArticle := models.Article{
 		Title:   "Hello",
 		Content: "Content",
 	}
 
 	t.Run("success", func(t *testing.T) {
-		tempMockArticle := mockArticle
-		tempMockArticle.ID = 0
+		tempMockArticle := mockArticleParam
+
 		mockArticleRepo.On("GetByTitle", mock.Anything, mock.AnythingOfType("string")).Return(models.Article{}, util.ErrNotFound).Once()
 		mockArticleRepo.On("Store", mock.Anything, mock.AnythingOfType("*models.Article")).Return(nil).Once()
 
 		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
-		err := u.Store(context.TODO(), &tempMockArticle)
+		err := u.Store(context.TODO(), tempMockArticle)
 
 		assert.NoError(t, err)
-		assert.Equal(t, mockArticle.Title, tempMockArticle.Title)
+		assert.Equal(t, mockArticleParam.Title, tempMockArticle.Title)
 		mockArticleRepo.AssertExpectations(t)
 	})
 	t.Run("existing-title", func(t *testing.T) {
@@ -122,7 +127,7 @@ func TestStore(t *testing.T) {
 
 		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
-		err := u.Store(context.TODO(), &mockArticle)
+		err := u.Store(context.TODO(), mockArticleParam)
 
 		assert.Error(t, err)
 		mockArticleRepo.AssertExpectations(t)
@@ -178,18 +183,18 @@ func TestDelete(t *testing.T) {
 
 func TestUpdate(t *testing.T) {
 	mockArticleRepo := new(mocks.ArticleRepository)
-	mockArticle := models.Article{
+	mockArticleParam := service.ArticleParam{
 		Title:   "Hello",
 		Content: "Content",
 		ID:      23,
 	}
 
 	t.Run("success", func(t *testing.T) {
-		mockArticleRepo.On("Update", mock.Anything, &mockArticle).Once().Return(nil)
+		mockArticleRepo.On("Update", mock.Anything, mock.AnythingOfType("*models.Article")).Once().Return(nil)
 
 		u := service.NewArticleService(mockArticleRepo, time.Second*2)
 
-		err := u.Update(context.TODO(), &mockArticle)
+		err := u.Update(context.TODO(), mockArticleParam)
 		assert.NoError(t, err)
 		mockArticleRepo.AssertExpectations(t)
 	})

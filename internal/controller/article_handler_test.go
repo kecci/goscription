@@ -105,7 +105,7 @@ func TestStore(t *testing.T) {
 
 	j, err := json.Marshal(tempMockArticle)
 	assert.NoError(t, err)
-	mockUCase.On("Store", mock.Anything, mock.AnythingOfType("*models.Article")).Return(nil)
+	mockUCase.On("Store", mock.Anything, mock.AnythingOfType("service.ArticleParam")).Return(nil)
 
 	e := echo.New()
 	req, err := http.NewRequest(echo.POST, "/articles", strings.NewReader(string(j)))
