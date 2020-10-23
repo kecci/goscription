@@ -9,5 +9,6 @@ import (
 var Module = fx.Options(
 	fx.Provide(
 		mysql.NewArticleRepository,
+		mysql.NewUserRepository,
 	),
 )

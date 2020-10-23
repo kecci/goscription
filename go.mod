@@ -13,6 +13,8 @@ require (
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang-migrate/migrate v3.5.4+incompatible
+	github.com/golang-migrate/migrate/v4 v4.13.0 // indirect
+	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/labstack/echo/v4 v4.1.16
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
@@ -25,8 +27,4 @@ require (
 	github.com/swaggo/swag v1.6.5
 	github.com/vektra/mockery v1.1.2 // indirect
 	go.uber.org/fx v1.11.0
-	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
-	golang.org/x/lint v0.0.0-20200130185559-910be7a94367 // indirect
-	golang.org/x/mod v0.2.0 // indirect
-	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
 )
