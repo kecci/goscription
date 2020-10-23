@@ -1,5 +1,5 @@
 PROJECTNAME := $(shell basename "$(PWD)")
-# PROJECTNAME := SET-PAYMENT
+# PROJECTNAME := SET-PAYMENT-CORE
 VERSION := v0.1.0-0
 RELEASENAME := $(PROJECTNAME)_$(VERSION)
 
@@ -124,10 +124,15 @@ migrate-prepare:
 	@go build -a -o ./bin/migrate -tags 'mysql' github.com/golang-migrate/migrate/v4/cli
 
 ## migrate-up: run migration up to latest version
+.PHONY: migrate-create
+migrate-create:
+	@migrate create -ext sql -dir internal/database/migrations -seq $(filter-out $@,$(MAKECMDGOALS))
+
+## migrate-up: run migration up to latest version
 .PHONY: migrate-up
 migrate-up:
 	@migrate -database "mysql://$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_ADDRESS))/$(MYSQL_DATABASE)" \
-	-path=internal/database/mysql/migrations up	
+	-path=internal/database/migrations up	
 
 ## migrate-down: run migration down to oldest version
 .PHONY: migrate-down

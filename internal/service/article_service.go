@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/abyanjksatu/goscription/internal/database/mysql"
+	"github.com/abyanjksatu/goscription/internal/repository"
 	"github.com/abyanjksatu/goscription/models"
 	"github.com/abyanjksatu/goscription/util"
 )
@@ -27,12 +27,12 @@ type ArticleParam struct {
 }
 
 type articleService struct {
-	articleRepo    mysql.ArticleRepository
+	articleRepo    repository.ArticleRepository
 	contextTimeout time.Duration
 }
 
 // NewArticleService will create new an articleService object representation of service.ArticleService interface
-func NewArticleService(a mysql.ArticleRepository, timeout time.Duration) ArticleService {
+func NewArticleService(a repository.ArticleRepository, timeout time.Duration) ArticleService {
 	if a == nil {
 		panic("Article repository is nil")
 	}

@@ -1,4 +1,4 @@
-package mysql_test
+package repository_test
 
 import (
 	"database/sql"

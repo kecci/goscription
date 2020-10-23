@@ -12,3 +12,7 @@ contextTimeout="5"
 [godaddy]
   host="https://api.ote-godaddy.com"
   authorization="sso-key authorizationCode"
+[redis]
+  host="localhost"
+  port="2701"
+  password="root"

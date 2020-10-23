@@ -184,3 +184,7 @@ You can see more about swag annotation in here: https://github.com/swaggo/swag.
 
 ## Sources
 This template is inspired & modified from https://github.com/golangid/menekel
+
+## TODO
+- Hook
+- Redis

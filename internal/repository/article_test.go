@@ -1,4 +1,4 @@
-package mysql_test
+package repository_test
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	repoHandler "github.com/abyanjksatu/goscription/internal/database/mysql"
+	repoHandler "github.com/abyanjksatu/goscription/internal/repository"
 	"github.com/abyanjksatu/goscription/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

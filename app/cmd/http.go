@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/abyanjksatu/goscription/internal/controller"
-	"github.com/abyanjksatu/goscription/internal/database"
+	"github.com/abyanjksatu/goscription/internal/repository"
 	"github.com/abyanjksatu/goscription/internal/outbound"
 	"github.com/abyanjksatu/goscription/internal/server"
 	"github.com/abyanjksatu/goscription/internal/service"
@@ -33,7 +33,7 @@ func inject() fx.Option {
 			NewDbConn,
 		),
 		server.Module,
-		database.Module,
+		repository.Module,
 		service.Module,
 		outbound.Module,
 		controller.Module,
