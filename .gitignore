@@ -12,7 +12,8 @@
 *.out
 vendor
 bin/
+docs/
+release/
 goscription
 config.toml
 config.json
-docs/

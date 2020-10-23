@@ -8,4 +8,5 @@ import (
 var Module = fx.Provide(
 	NewArticleService,
 	NewDomainService,
+	NewUserService,
 )

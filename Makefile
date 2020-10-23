@@ -1,9 +1,12 @@
 PROJECTNAME := $(shell basename "$(PWD)")
+# PROJECTNAME := SET-PAYMENT
+VERSION := v0.1.0-0
+RELEASENAME := $(PROJECTNAME)_$(VERSION)
 
-MYSQL_USER ?= user
-MYSQL_PASSWORD ?= password
+MYSQL_USER ?= root
+MYSQL_PASSWORD ?= 123456
 MYSQL_ADDRESS ?= 127.0.0.1:3306
-MYSQL_DATABASE ?= article
+MYSQL_DATABASE ?= goscription
 
 ifndef $(GOPATH)
     GOPATH=$(shell go env GOPATH)
@@ -140,3 +143,22 @@ help: Makefile
 	@echo
 	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
 	@echo
+
+## release: create release app with version
+.PHONY: release
+release:
+	@echo "Start: build release "$(RELEASENAME)""
+	@rm -rf release
+	@mkdir release
+	
+	@make test-unit
+	@make swagger-init
+	@make swagger-validate
+
+	@echo "Build release "$(RELEASENAME)"_linux_amd64"
+	@GOOS=linux GOARCH=amd64 go build -o release/"$(RELEASENAME)"_linux_amd64 app/main.go
+
+	@echo "Build release "$(RELEASENAME)"_darwin_amd64"
+	@GOOS=darwin GOARCH=amd64 go build -o release/"$(RELEASENAME)"_darwin_amd64 app/main.go
+
+	@echo "Done: build release "$(RELEASENAME)""
