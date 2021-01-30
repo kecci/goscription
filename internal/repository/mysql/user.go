@@ -24,11 +24,11 @@ type mysqlUserRepository struct {
 }
 
 // NewUserRepository will create an object that represent the article.Repository interface
-func NewUserRepository(Conn *sql.DB) UserRepository {
-	if Conn == nil {
+func NewUserRepository(conn *sql.DB) UserRepository {
+	if conn == nil {
 		panic("Database Connections is nil")
 	}
-	return &mysqlUserRepository{Conn}
+	return &mysqlUserRepository{conn}
 }
 
 func (m *mysqlUserRepository) Store(ctx context.Context, a *models.User) (err error) {

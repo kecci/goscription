@@ -9,26 +9,29 @@ import (
 	"github.com/kecci/goscription/util"
 )
 
-//ArticleService represent the service of the article
-type ArticleService interface {
-	Fetch(ctx context.Context, cursor string, num int64) (res []models.Article, csr string, err error)
-	GetByID(ctx context.Context, id int64) (res models.Article, err error)
-	Update(context.Context, ArticleParam) (err error)
-	GetByTitle(ctx context.Context, title string) (res models.Article, err error)
-	Store(context.Context, ArticleParam) (err error)
-	Delete(ctx context.Context, id int64) (err error)
-}
+type (
+	// ArticleService represent the service of the article
+	ArticleService interface {
+		Fetch(ctx context.Context, cursor string, num int64) (res []models.Article, csr string, err error)
+		GetByID(ctx context.Context, id int64) (res models.Article, err error)
+		Update(context.Context, ArticleParam) (err error)
+		GetByTitle(ctx context.Context, title string) (res models.Article, err error)
+		Store(context.Context, ArticleParam) (err error)
+		Delete(ctx context.Context, id int64) (err error)
+	}
 
-//ArticleParam is paramter for Store Param
+	// ArticleServiceImpl represent the service of the article
+	ArticleServiceImpl struct {
+		articleRepo    mysql.ArticleRepository
+		contextTimeout time.Duration
+	}
+)
+
+// ArticleParam ...
 type ArticleParam struct {
 	ID      int64  `json:"id"`
 	Title   string `json:"title" validate:"required"`
 	Content string `json:"content" validate:"required"`
-}
-
-type articleService struct {
-	articleRepo    mysql.ArticleRepository
-	contextTimeout time.Duration
 }
 
 // NewArticleService will create new an articleService object representation of service.ArticleService interface
@@ -39,13 +42,14 @@ func NewArticleService(a mysql.ArticleRepository, timeout time.Duration) Article
 	if timeout == 0 {
 		panic("Timeout is empty")
 	}
-	return &articleService{
+	return &ArticleServiceImpl{
 		articleRepo:    a,
 		contextTimeout: timeout,
 	}
 }
 
-func (a *articleService) Fetch(c context.Context, cursor string, num int64) (res []models.Article, nextCursor string, err error) {
+// Fetch ...
+func (a *ArticleServiceImpl) Fetch(c context.Context, cursor string, num int64) (res []models.Article, nextCursor string, err error) {
 	if num == 0 {
 		num = 10
 	}
@@ -61,7 +65,8 @@ func (a *articleService) Fetch(c context.Context, cursor string, num int64) (res
 	return
 }
 
-func (a *articleService) GetByID(c context.Context, id int64) (res models.Article, err error) {
+// GetByID ...
+func (a *ArticleServiceImpl) GetByID(c context.Context, id int64) (res models.Article, err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 
@@ -69,7 +74,8 @@ func (a *articleService) GetByID(c context.Context, id int64) (res models.Articl
 	return
 }
 
-func (a *articleService) Update(c context.Context, ap ArticleParam) (err error) {
+// Update ...
+func (a *ArticleServiceImpl) Update(c context.Context, ap ArticleParam) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 
@@ -83,14 +89,16 @@ func (a *articleService) Update(c context.Context, ap ArticleParam) (err error) 
 	return a.articleRepo.Update(ctx, &ar)
 }
 
-func (a *articleService) GetByTitle(c context.Context, title string) (res models.Article, err error) {
+// GetByTitle ...
+func (a *ArticleServiceImpl) GetByTitle(c context.Context, title string) (res models.Article, err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 	res, err = a.articleRepo.GetByTitle(ctx, title)
 	return
 }
 
-func (a *articleService) Store(c context.Context, p ArticleParam) (err error) {
+// Store ...
+func (a *ArticleServiceImpl) Store(c context.Context, p ArticleParam) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 	existedArticle, _ := a.GetByTitle(ctx, p.Title)
@@ -107,7 +115,8 @@ func (a *articleService) Store(c context.Context, p ArticleParam) (err error) {
 	return
 }
 
-func (a *articleService) Delete(c context.Context, id int64) (err error) {
+// Delete ...
+func (a *ArticleServiceImpl) Delete(c context.Context, id int64) (err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 	existedArticle, err := a.articleRepo.GetByID(ctx, id)

@@ -18,7 +18,7 @@ func NewGodaddyOutbound() GodaddyOutbound {
 	return &godaddyOutbound{}
 }
 
-//GodaddyOutbound represent the usecase of the domain
+// GodaddyOutbound represent the usecase of the domain
 type GodaddyOutbound interface {
 	GetDomainAvailable(domain string) (res models.DomainAvailableResponse, err error)
 }

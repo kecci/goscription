@@ -94,7 +94,7 @@ func (a *articleController) GetByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, art)
 }
 
-//ArticleRequest article body request
+// ArticleRequest article body request
 type ArticleRequest struct {
 	Title   string `json:"title" validate:"required"`
 	Content string `json:"content" validate:"required"`

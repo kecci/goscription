@@ -5,7 +5,7 @@ import (
 	"go.uber.org/fx"
 )
 
-//Module for controller database repository
+// Module for controller database repository
 var Module = fx.Options(
 	fx.Provide(
 		mysql.NewArticleRepository,

@@ -5,20 +5,24 @@ import (
 	"github.com/kecci/goscription/models"
 )
 
-type domainService struct {
-	godaddyOutbound outbound.GodaddyOutbound
-}
+type (
+	// DomainService represent the service of the domain
+	DomainService interface {
+		GetDomainAvailable(domain string) (res models.DomainAvailableResponse, err error)
+	}
 
-//DomainService represent the service of the domain
-type DomainService interface {
-	GetDomainAvailable(domain string) (res models.DomainAvailableResponse, err error)
-}
+	// DomainServiceImpl represent the service of the domain
+	DomainServiceImpl struct {
+		godaddyOutbound outbound.GodaddyOutbound
+	}
+)
 
 // NewDomainService will create new an domainService object representation of service.DomainService interface
 func NewDomainService(gd outbound.GodaddyOutbound) DomainService {
-	return &domainService{godaddyOutbound: gd}
+	return &DomainServiceImpl{godaddyOutbound: gd}
 }
 
-func (d *domainService) GetDomainAvailable(domain string) (res models.DomainAvailableResponse, err error) {
+// GetDomainAvailable ...
+func (d *DomainServiceImpl) GetDomainAvailable(domain string) (res models.DomainAvailableResponse, err error) {
 	return d.godaddyOutbound.GetDomainAvailable(domain)
 }

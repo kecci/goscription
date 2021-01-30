@@ -4,7 +4,7 @@ import (
 	"go.uber.org/fx"
 )
 
-//Module for service module
+// Module for service module
 var Module = fx.Provide(
 	NewArticleService,
 	NewDomainService,

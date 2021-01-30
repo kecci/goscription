@@ -14,6 +14,7 @@ var (
 	configType = "toml"
 )
 
+// NewConfig init config
 func NewConfig() models.Config {
 	conf := &models.Config{}
 	err := viper.Unmarshal(conf)

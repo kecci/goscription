@@ -1,7 +1,7 @@
 package models
 
-// AppConfig is application configuration
 type (
+	// Config is application configuration
 	Config struct {
 		Title          string   `mapstructure:"title"`
 		Debug          bool     `mapstructure:"debug"`
@@ -11,10 +11,12 @@ type (
 		Godaddy        Godaddy  `mapstructure:"godaddy"`
 	}
 
+	// Server ...
 	Server struct {
 		Address string `mapstructure:"address"`
 	}
 
+	// Database ...
 	Database struct {
 		Driver string `mapstructure:"driver"`
 		Host   string `mapstructure:"host"`
@@ -24,6 +26,7 @@ type (
 		Name   string `mapstructure:"name"`
 	}
 
+	// Godaddy ...
 	Godaddy struct {
 		Host          string `mapstructure:"host"`
 		Authorization string `mapstructure:"authorization"`

@@ -11,12 +11,12 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//GoMiddleware struct of middleware
+// GoMiddleware struct of middleware
 type GoMiddleware struct {
 	// another stuff , may be needed by middleware
 }
 
-//CORS set cors by echo
+// CORS set cors by echo
 func (m *GoMiddleware) CORS(h echo.HandlerFunc) echo.HandlerFunc {
 	cors := middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
@@ -26,7 +26,7 @@ func (m *GoMiddleware) CORS(h echo.HandlerFunc) echo.HandlerFunc {
 	return cors(h)
 }
 
-//Recover set recover by echo
+// Recover set recover by echo
 func (m *GoMiddleware) Recover(h echo.HandlerFunc) echo.HandlerFunc {
 	recover := middleware.Recover()
 	return recover(h)
@@ -47,7 +47,7 @@ func makeLogEntry(c echo.Context) *log.Entry {
 	})
 }
 
-//Logger for log
+// Logger for log
 func (m *GoMiddleware) Logger(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if strings.Contains(c.Request().RequestURI, "swagger") {
@@ -58,7 +58,7 @@ func (m *GoMiddleware) Logger(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-//ErrorHandler fot context echo
+// ErrorHandler fot context echo
 func (m *GoMiddleware) ErrorHandler(err error, c echo.Context) {
 	report, ok := err.(*echo.HTTPError)
 	if ok {
@@ -66,12 +66,11 @@ func (m *GoMiddleware) ErrorHandler(err error, c echo.Context) {
 	} else {
 		report = echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-
 	makeLogEntry(c).Error(report.Message)
-	c.HTML(report.Code, report.Message.(string))
+	c.Echo().DefaultHTTPErrorHandler(err, c)
 }
 
-//InitMiddleware will initialize the middleware handler
+// InitMiddleware will initialize the middleware handler
 func InitMiddleware() *GoMiddleware {
 	return &GoMiddleware{}
 }

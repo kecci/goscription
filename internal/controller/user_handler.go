@@ -57,7 +57,7 @@ func (a *userController) GetByID(c echo.Context) error {
 	return c.JSON(http.StatusOK, art)
 }
 
-//UserRequest user body request
+// UserRequest user body request
 type UserRequest struct {
 	Name     string `json:"name" validate:"required"`
 	Email    string `json:"email" validate:"required"`

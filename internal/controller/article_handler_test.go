@@ -79,7 +79,7 @@ func TestGetByID(t *testing.T) {
 	mockUCase.On("GetByID", mock.Anything, int64(num)).Return(mockArticle, nil)
 
 	e := echo.New()
-	req, err := http.NewRequest(echo.GET, "/articles/"+strconv.Itoa(int(num)), strings.NewReader(""))
+	req, err := http.NewRequest(echo.GET, "/articles/"+strconv.Itoa(num), strings.NewReader(""))
 	assert.NoError(t, err)
 
 	rec := httptest.NewRecorder()
@@ -130,7 +130,7 @@ func TestDelete(t *testing.T) {
 	mockUCase.On("Delete", mock.Anything, int64(num)).Return(nil)
 
 	e := echo.New()
-	req, err := http.NewRequest(echo.DELETE, "/articles/"+strconv.Itoa(int(num)), strings.NewReader(""))
+	req, err := http.NewRequest(echo.DELETE, "/articles/"+strconv.Itoa(num), strings.NewReader(""))
 	assert.NoError(t, err)
 
 	rec := httptest.NewRecorder()

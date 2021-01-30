@@ -28,11 +28,11 @@ type mysqlArticleRepository struct {
 }
 
 // NewArticleRepository will create an object that represent the article.Repository interface
-func NewArticleRepository(Conn *sql.DB) ArticleRepository {
-	if Conn == nil {
+func NewArticleRepository(conn *sql.DB) ArticleRepository {
+	if conn == nil {
 		panic("Database Connections is nil")
 	}
-	return &mysqlArticleRepository{Conn}
+	return &mysqlArticleRepository{conn}
 }
 
 func (m *mysqlArticleRepository) fetch(ctx context.Context, query string, args ...interface{}) (result []models.Article, err error) {

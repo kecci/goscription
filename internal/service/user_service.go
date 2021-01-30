@@ -9,17 +9,25 @@ import (
 	"github.com/kecci/goscription/util"
 )
 
-//UserService represent the service of the article
-type UserService interface {
-	// Fetch(ctx context.Context, cursor string, num int64) (res []models.Article, csr string, err error)
-	GetByID(ctx context.Context, id int64) (res models.User, err error)
-	// Update(context.Context, ArticleParam) (err error)
-	GetByEmail(ctx context.Context, email string) (res models.User, err error)
-	Store(context.Context, UserParam) (res models.User, err error)
-	// Delete(ctx context.Context, id int64) (err error)
-}
+type (
+	// UserService represent the service of the article
+	UserService interface {
+		// Fetch(ctx context.Context, cursor string, num int64) (res []models.Article, csr string, err error)
+		GetByID(ctx context.Context, id int64) (res models.User, err error)
+		// Update(context.Context, ArticleParam) (err error)
+		GetByEmail(ctx context.Context, email string) (res models.User, err error)
+		Store(context.Context, UserParam) (res models.User, err error)
+		// Delete(ctx context.Context, id int64) (err error)
+	}
 
-//UserParam is paramter for Store Param
+	// UserServiceImpl represent the service of the article
+	UserServiceImpl struct {
+		userRepo       mysql.UserRepository
+		contextTimeout time.Duration
+	}
+)
+
+// UserParam ...
 type UserParam struct {
 	ID       int64  `json:"id"`
 	Name     string `json:"name" validate:"required"`
@@ -27,26 +35,16 @@ type UserParam struct {
 	Password string `json:"password" validate:"required"`
 }
 
-type userService struct {
-	userRepo       mysql.UserRepository
-	contextTimeout time.Duration
-}
-
 // NewUserService will create new an articleService object representation of service.ArticleService interface
 func NewUserService(a mysql.UserRepository, timeout time.Duration) UserService {
-	if a == nil {
-		panic("User repository is nil")
-	}
-	if timeout == 0 {
-		panic("Timeout is empty")
-	}
-	return &userService{
+	return &UserServiceImpl{
 		userRepo:       a,
 		contextTimeout: timeout,
 	}
 }
 
-func (a *userService) Store(c context.Context, p UserParam) (res models.User, err error) {
+// Store ...
+func (a *UserServiceImpl) Store(c context.Context, p UserParam) (res models.User, err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 	existedUser, _ := a.GetByEmail(ctx, p.Email)
@@ -64,7 +62,8 @@ func (a *userService) Store(c context.Context, p UserParam) (res models.User, er
 	return
 }
 
-func (a *userService) GetByID(c context.Context, id int64) (res models.User, err error) {
+// GetByID ...
+func (a *UserServiceImpl) GetByID(c context.Context, id int64) (res models.User, err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 
@@ -72,7 +71,8 @@ func (a *userService) GetByID(c context.Context, id int64) (res models.User, err
 	return
 }
 
-func (a *userService) GetByEmail(c context.Context, email string) (res models.User, err error) {
+// GetByEmail ...
+func (a *UserServiceImpl) GetByEmail(c context.Context, email string) (res models.User, err error) {
 	ctx, cancel := context.WithTimeout(c, a.contextTimeout)
 	defer cancel()
 	res, err = a.userRepo.GetByEmail(ctx, email)
