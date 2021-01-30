@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	repoHandler "github.com/kecci/goscription/internal/database/mysql"
+	repoHandler "github.com/kecci/goscription/internal/repository/mysql"
 	"github.com/kecci/goscription/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

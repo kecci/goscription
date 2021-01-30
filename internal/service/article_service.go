@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/kecci/goscription/internal/database/mysql"
+	"github.com/kecci/goscription/internal/repository/mysql"
 	"github.com/kecci/goscription/models"
 	"github.com/kecci/goscription/util"
 )

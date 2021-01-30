@@ -1,7 +1,7 @@
-package database
+package repository
 
 import (
-	"github.com/kecci/goscription/internal/database/mysql"
+	"github.com/kecci/goscription/internal/repository/mysql"
 	"go.uber.org/fx"
 )
 

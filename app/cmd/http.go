@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/kecci/goscription/internal/controller"
-	"github.com/kecci/goscription/internal/database"
+	"github.com/kecci/goscription/internal/repository"
 	"github.com/kecci/goscription/internal/http"
 	"github.com/kecci/goscription/internal/library"
 	"github.com/kecci/goscription/internal/library/db"
@@ -32,9 +32,9 @@ func inject() fx.Option {
 			util.NewTimeOutContext,
 			db.NewMysqlDB,
 		),
-		database.Module,
-		service.Module,
 		outbound.Module,
+		repository.Module,
+		service.Module,
 		controller.Module,
 		http.Module,
 	)
