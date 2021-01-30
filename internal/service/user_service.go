@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/kecci/goscription/utility"
 	"github.com/kecci/goscription/internal/repository/mysql"
 	"github.com/kecci/goscription/models"
+	"github.com/kecci/goscription/utility"
 )
 
 type (
