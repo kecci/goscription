@@ -1,8 +1,9 @@
-package middleware
+package http
 
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -49,6 +50,9 @@ func makeLogEntry(c echo.Context) *log.Entry {
 //Logger for log
 func (m *GoMiddleware) Logger(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		if strings.Contains(c.Request().RequestURI, "swagger") {
+			return next(c)
+		}
 		makeLogEntry(c).Info("incoming request")
 		return next(c)
 	}

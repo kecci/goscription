@@ -57,6 +57,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(library.InitConfig)
 	rootCmd.AddCommand(httpCmd)
+	rootCmd.AddCommand(httpCmd)
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(projectCmd)
 	rootCmd.AddCommand(mysqlCmd)

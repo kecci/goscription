@@ -1,9 +1,7 @@
-package server
+package http
 
 import (
 	"context"
-
-	"github.com/kecci/goscription/internal/middleware"
 	"github.com/kecci/goscription/models"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
@@ -11,15 +9,15 @@ import (
 	"go.uber.org/fx"
 )
 
-//Module for server
+// Module for server
 var Module = fx.Provide(NewServer)
 
-//NewServer initialize new server
+// NewServer initialize new server
 func NewServer(lc fx.Lifecycle, config models.Config) *echo.Echo {
 	instance := echo.New()
 
 	// Middleware
-	middL := middleware.InitMiddleware()
+	middL := InitMiddleware()
 	instance.Use(middL.CORS)
 	instance.Use(middL.Logger)
 	instance.Use(middL.Recover)
@@ -31,7 +29,12 @@ func NewServer(lc fx.Lifecycle, config models.Config) *echo.Echo {
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			logrus.Print("Starting HTTP server.")
-			go instance.Start(config.Server.Address)
+			go func() {
+				err := instance.Start(config.Server.Address)
+				if err != nil {
+					logrus.Fatal(err)
+				}
+			}()
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
