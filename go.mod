@@ -9,7 +9,7 @@ require (
 	github.com/go-openapi/spec v0.20.1 // indirect
 	github.com/go-openapi/swag v0.19.13 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/golang-migrate/migrate v3.5.4+incompatible
+	github.com/golang-migrate/migrate v3.5.4+incompatible // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/labstack/echo/v4 v4.1.16
 	github.com/magiconair/properties v1.8.4 // indirect

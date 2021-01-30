@@ -12,7 +12,7 @@ import (
 	"github.com/kecci/goscription/internal/service"
 	"github.com/kecci/goscription/mocks"
 	"github.com/kecci/goscription/models"
-	"github.com/kecci/goscription/util"
+	"github.com/kecci/goscription/utility"
 )
 
 func TestFetch(t *testing.T) {
@@ -110,7 +110,7 @@ func TestStore(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		tempMockArticle := mockArticleParam
 
-		mockArticleRepo.On("GetByTitle", mock.Anything, mock.AnythingOfType("string")).Return(models.Article{}, util.ErrNotFound).Once()
+		mockArticleRepo.On("GetByTitle", mock.Anything, mock.AnythingOfType("string")).Return(models.Article{}, utility.ErrNotFound).Once()
 		mockArticleRepo.On("Store", mock.Anything, mock.AnythingOfType("*models.Article")).Return(nil).Once()
 
 		u := service.NewArticleService(mockArticleRepo, time.Second*2)

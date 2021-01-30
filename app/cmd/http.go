@@ -8,7 +8,7 @@ import (
 	"github.com/kecci/goscription/internal/outbound"
 	"github.com/kecci/goscription/internal/repository"
 	"github.com/kecci/goscription/internal/service"
-	"github.com/kecci/goscription/util"
+	"github.com/kecci/goscription/utility"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 )
@@ -29,7 +29,7 @@ func inject() fx.Option {
 	return fx.Options(
 		fx.Provide(
 			library.NewConfig,
-			util.NewTimeOutContext,
+			utility.NewTimeOutContext,
 			db.NewMysqlDB,
 		),
 		outbound.Module,

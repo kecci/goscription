@@ -9,7 +9,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/kecci/goscription/models"
-	"github.com/kecci/goscription/util"
+	"github.com/kecci/goscription/utility"
 	"github.com/sirupsen/logrus"
 )
 
@@ -77,7 +77,7 @@ func (m *mysqlArticleRepository) Fetch(ctx context.Context, cursor string, num i
 	if cursor != "" {
 		decodedCursor, err := strconv.ParseInt(cursor, 10, 64)
 		if err != nil && cursor != "" {
-			return nil, "", util.ErrBadParamInput
+			return nil, "", utility.ErrBadParamInput
 		}
 		qbuilder = qbuilder.Where(squirrel.Lt{
 			"id": decodedCursor,
@@ -113,7 +113,7 @@ func (m *mysqlArticleRepository) GetByID(ctx context.Context, id int64) (res mod
 	if len(list) > 0 {
 		res = list[0]
 	} else {
-		return res, util.ErrNotFound
+		return res, utility.ErrNotFound
 	}
 
 	return
@@ -131,7 +131,7 @@ func (m *mysqlArticleRepository) GetByTitle(ctx context.Context, title string) (
 	if len(list) > 0 {
 		res = list[0]
 	} else {
-		return res, util.ErrNotFound
+		return res, utility.ErrNotFound
 	}
 	return
 }

@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/kecci/goscription/models"
-	"github.com/kecci/goscription/util"
+	"github.com/kecci/goscription/utility"
 	"github.com/sirupsen/logrus"
 )
 
@@ -61,7 +61,7 @@ func (m *mysqlUserRepository) GetByID(ctx context.Context, id int64) (res models
 	if len(list) > 0 {
 		res = list[0]
 	} else {
-		return res, util.ErrNotFound
+		return res, utility.ErrNotFound
 	}
 
 	return
@@ -112,7 +112,7 @@ func (m *mysqlUserRepository) GetByEmail(ctx context.Context, title string) (res
 	if len(list) > 0 {
 		res = list[0]
 	} else {
-		return res, util.ErrNotFound
+		return res, utility.ErrNotFound
 	}
 	return
 }

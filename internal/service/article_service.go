@@ -6,7 +6,7 @@ import (
 
 	"github.com/kecci/goscription/internal/repository/mysql"
 	"github.com/kecci/goscription/models"
-	"github.com/kecci/goscription/util"
+	"github.com/kecci/goscription/utility"
 )
 
 type (
@@ -103,7 +103,7 @@ func (a *ArticleServiceImpl) Store(c context.Context, p ArticleParam) (err error
 	defer cancel()
 	existedArticle, _ := a.GetByTitle(ctx, p.Title)
 	if existedArticle != (models.Article{}) {
-		return util.ErrConflict
+		return utility.ErrConflict
 	}
 
 	m := models.Article{
@@ -124,7 +124,7 @@ func (a *ArticleServiceImpl) Delete(c context.Context, id int64) (err error) {
 		return
 	}
 	if existedArticle == (models.Article{}) {
-		return util.ErrNotFound
+		return utility.ErrNotFound
 	}
 	return a.articleRepo.Delete(ctx, id)
 }

@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/kecci/goscription/internal/service"
-	"github.com/kecci/goscription/util"
+	"github.com/kecci/goscription/utility"
 	"github.com/labstack/echo/v4"
 )
 
@@ -54,7 +54,7 @@ func (a *articleController) FetchArticle(c echo.Context) error {
 
 	listAr, nextCursor, err := a.AService.Fetch(ctx, cursor, int64(num))
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	c.Response().Header().Set(`X-Cursor`, nextCursor)
@@ -77,7 +77,7 @@ func (a *articleController) FetchArticle(c echo.Context) error {
 func (a *articleController) GetByID(c echo.Context) error {
 	idP, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	ctx := c.Request().Context()
@@ -88,7 +88,7 @@ func (a *articleController) GetByID(c echo.Context) error {
 	id := int64(idP)
 	art, err := a.AService.GetByID(ctx, id)
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, art)
@@ -131,7 +131,7 @@ func (a *articleController) Store(c echo.Context) error {
 
 	err = a.AService.Store(ctx, articleParam)
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	return c.JSON(http.StatusCreated, articleParam)
@@ -157,13 +157,13 @@ func (a *articleController) Delete(c echo.Context) error {
 
 	idP, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	id := int64(idP)
 	err = a.AService.Delete(ctx, id)
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	return c.NoContent(http.StatusNoContent)
@@ -185,7 +185,7 @@ func (a *articleController) Delete(c echo.Context) error {
 func (a *articleController) Update(c echo.Context) error {
 	idP, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	var ar ArticleRequest
@@ -207,7 +207,7 @@ func (a *articleController) Update(c echo.Context) error {
 
 	err = a.AService.Update(ctx, articleParam)
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	return c.JSON(http.StatusCreated, articleParam)

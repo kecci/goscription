@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/kecci/goscription/internal/service"
-	"github.com/kecci/goscription/util"
+	"github.com/kecci/goscription/utility"
 	"github.com/labstack/echo/v4"
 )
 
@@ -40,7 +40,7 @@ func InitUserController(e *echo.Echo, us service.UserService) {
 func (a *userController) GetByID(c echo.Context) error {
 	idP, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	ctx := c.Request().Context()
@@ -51,7 +51,7 @@ func (a *userController) GetByID(c echo.Context) error {
 	id := int64(idP)
 	art, err := a.UService.GetByID(ctx, id)
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, art)
@@ -96,7 +96,7 @@ func (a *userController) Store(c echo.Context) error {
 
 	_, err = a.UService.Store(ctx, userParam)
 	if err != nil {
-		return c.JSON(util.GetStatusCode(err), ResponseError{Message: err.Error()})
+		return c.JSON(utility.GetStatusCode(err), ResponseError{Message: err.Error()})
 	}
 
 	return c.JSON(http.StatusCreated, userParam)

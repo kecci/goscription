@@ -12,7 +12,7 @@ import (
 	"github.com/kecci/goscription/internal/controller"
 	"github.com/kecci/goscription/mocks"
 	"github.com/kecci/goscription/models"
-	"github.com/kecci/goscription/util"
+	"github.com/kecci/goscription/utility"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -51,7 +51,7 @@ func TestFetchError(t *testing.T) {
 	mockUCase := new(mocks.ArticleService)
 	num := 1
 	cursor := "2"
-	mockUCase.On("Fetch", mock.Anything, cursor, int64(num)).Return(nil, "", util.ErrInternalServerError)
+	mockUCase.On("Fetch", mock.Anything, cursor, int64(num)).Return(nil, "", utility.ErrInternalServerError)
 
 	e := echo.New()
 	req, err := http.NewRequest(echo.GET, "/articles?num=1&cursor="+cursor, strings.NewReader(""))

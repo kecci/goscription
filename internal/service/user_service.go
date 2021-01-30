@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/kecci/goscription/utility"
 	"github.com/kecci/goscription/internal/repository/mysql"
 	"github.com/kecci/goscription/models"
-	"github.com/kecci/goscription/util"
 )
 
 type (
@@ -49,7 +49,7 @@ func (a *UserServiceImpl) Store(c context.Context, p UserParam) (res models.User
 	defer cancel()
 	existedUser, _ := a.GetByEmail(ctx, p.Email)
 	if existedUser != (models.User{}) {
-		return models.User{}, util.ErrConflict
+		return models.User{}, utility.ErrConflict
 	}
 
 	m := models.User{
