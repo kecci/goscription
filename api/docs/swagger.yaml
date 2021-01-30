@@ -1,0 +1,372 @@
+basePath: /
+definitions:
+  controller.ArticleRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    required:
+    - content
+    - title
+    type: object
+  controller.ResponseError:
+    properties:
+      message:
+        type: string
+    type: object
+  controller.UserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  models.DomainAvailableResponse:
+    properties:
+      available:
+        type: boolean
+      currency:
+        type: string
+      definitive:
+        type: boolean
+      domain:
+        type: string
+      period:
+        type: integer
+      price:
+        type: integer
+    type: object
+host: localhost:9090
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Goscription Example API
+  version: "1.0"
+paths:
+  /articles:
+    delete:
+      consumes:
+      - application/json
+      description: Create an Article
+      parameters:
+      - description: Article ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+      summary: Create an Article
+      tags:
+      - articles
+    get:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - description: num
+        in: query
+        name: num
+        required: true
+        type: string
+      - description: cursor
+        in: query
+        name: cursor
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+      summary: Show a Article
+      tags:
+      - articles
+    post:
+      consumes:
+      - application/json
+      description: Create an Article
+      parameters:
+      - description: Article Body
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ArticleRequest'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+      summary: Create an Article
+      tags:
+      - articles
+  /articles/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get string by ID
+      operationId: get-string-by-int
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+      summary: Show a Article
+      tags:
+      - articles
+    put:
+      consumes:
+      - application/json
+      description: Update an Article
+      parameters:
+      - description: Article Body
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/controller.ArticleRequest'
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+      summary: Update an Article
+      tags:
+      - articles
+  /domains:
+    get:
+      consumes:
+      - application/json
+      description: get string by ID
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+      summary: Show a Domains
+      tags:
+      - domains
+  /domains/available:
+    get:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - description: domain name
+        in: query
+        name: domain
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            Token:
+              description: qwerty
+              type: string
+          schema:
+            $ref: '#/definitions/models.DomainAvailableResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+      summary: Show a Domains Available
+      tags:
+      - domains
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Create an User
+      parameters:
+      - description: User Body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controller.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+      summary: Create an User
+      tags:
+      - users
+  /user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controller.ResponseError'
+      summary: Show a User
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+  OAuth2AccessCode:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: accessCode
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Application:
+    flow: application
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Implicit:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: implicit
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    type: oauth2
+  OAuth2Password:
+    flow: password
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      read: ' Grants read access'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+swagger: "2.0"
+x-extension-openapi:
+  example: value on a json format

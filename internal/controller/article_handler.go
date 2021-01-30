@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/abyanjksatu/goscription/internal/service"
-	"github.com/abyanjksatu/goscription/util"
+	"github.com/kecci/goscription/internal/service"
+	"github.com/kecci/goscription/util"
 	"github.com/labstack/echo/v4"
 )
 
@@ -195,7 +195,7 @@ func (a *articleController) Update(c echo.Context) error {
 	}
 
 	articleParam := service.ArticleParam{
-		ID: int64(idP),
+		ID:      int64(idP),
 		Title:   ar.Title,
 		Content: ar.Content,
 	}

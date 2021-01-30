@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/abyanjksatu/goscription/internal/database/mysql"
-	"github.com/abyanjksatu/goscription/models"
-	"github.com/abyanjksatu/goscription/util"
+	"github.com/kecci/goscription/internal/database/mysql"
+	"github.com/kecci/goscription/models"
+	"github.com/kecci/goscription/util"
 )
 
 //UserService represent the service of the article
@@ -21,14 +21,14 @@ type UserService interface {
 
 //UserParam is paramter for Store Param
 type UserParam struct {
-	ID int64 `json:"id"`
-	Name   string `json:"name" validate:"required"`
-	Email string `json:"email" validate:"required"`
+	ID       int64  `json:"id"`
+	Name     string `json:"name" validate:"required"`
+	Email    string `json:"email" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
 
 type userService struct {
-	userRepo    mysql.UserRepository
+	userRepo       mysql.UserRepository
 	contextTimeout time.Duration
 }
 
@@ -41,7 +41,7 @@ func NewUserService(a mysql.UserRepository, timeout time.Duration) UserService {
 		panic("Timeout is empty")
 	}
 	return &userService{
-		userRepo:    a,
+		userRepo:       a,
 		contextTimeout: timeout,
 	}
 }
@@ -55,8 +55,8 @@ func (a *userService) Store(c context.Context, p UserParam) (res models.User, er
 	}
 
 	m := models.User{
-		Name: p.Name,
-		Email: p.Email,
+		Name:     p.Name,
+		Email:    p.Email,
 		Password: p.Password,
 	}
 

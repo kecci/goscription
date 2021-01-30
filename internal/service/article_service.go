@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/abyanjksatu/goscription/internal/database/mysql"
-	"github.com/abyanjksatu/goscription/models"
-	"github.com/abyanjksatu/goscription/util"
+	"github.com/kecci/goscription/internal/database/mysql"
+	"github.com/kecci/goscription/models"
+	"github.com/kecci/goscription/util"
 )
 
 //ArticleService represent the service of the article
@@ -21,7 +21,7 @@ type ArticleService interface {
 
 //ArticleParam is paramter for Store Param
 type ArticleParam struct {
-	ID int64 `json:"id"`
+	ID      int64  `json:"id"`
 	Title   string `json:"title" validate:"required"`
 	Content string `json:"content" validate:"required"`
 }
@@ -74,9 +74,9 @@ func (a *articleService) Update(c context.Context, ap ArticleParam) (err error) 
 	defer cancel()
 
 	ar := models.Article{
-		ID: ap.ID,
-		Title: ap.Title,
-		Content: ap.Content,
+		ID:        ap.ID,
+		Title:     ap.Title,
+		Content:   ap.Content,
 		UpdatedAt: time.Now(),
 	}
 
@@ -99,7 +99,7 @@ func (a *articleService) Store(c context.Context, p ArticleParam) (err error) {
 	}
 
 	m := models.Article{
-		Title: p.Title,
+		Title:   p.Title,
 		Content: p.Content,
 	}
 

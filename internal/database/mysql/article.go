@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
-	"github.com/abyanjksatu/goscription/models"
-	"github.com/abyanjksatu/goscription/util"
+	"github.com/kecci/goscription/models"
+	"github.com/kecci/goscription/util"
 	"github.com/sirupsen/logrus"
 )
 

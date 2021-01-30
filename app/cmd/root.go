@@ -1,24 +1,49 @@
 package cmd
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
-	"net/url"
 	"os"
-	"time"
 
+	"github.com/kecci/goscription/internal/library"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var (
+	// Version project version
+	Version = "1.0.0-0"
 	rootCmd = &cobra.Command{
-		Use:   "goscription",
-		Short: "Article Management CLI",
+		Use:     "goscription",
+		Version: Version,
+		Short:   "goscription Management CLI",
+		Long:    `goscription is skeleton service for golang project`,
+		Run: func(cmd *cobra.Command, args []string) {
+			httpCmd.Run(cmd, args)
+		},
 	}
-	dbConn *sql.DB
+
+	versionCmd = &cobra.Command{
+		Use:   "version",
+		Short: "Show version",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println(rootCmd.Version)
+		},
+	}
+
+	projectCmd = &cobra.Command{
+		Use:   "project",
+		Short: "Show project name",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println(rootCmd.Use)
+		},
+	}
+
+	mysqlCmd = &cobra.Command{
+		Use:   "mysql",
+		Short: "Show mysql connection name",
+		Run: func(cmd *cobra.Command, args []string) {
+		},
+	}
 )
 
 // Execute will run the CLI app of goscription
@@ -30,61 +55,9 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig, initHTTPServiceDependecies)
-}
-
-func initConfig() {
-	viper.SetConfigType("toml")
-	viper.SetConfigFile("config.toml")
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	logrus.Info("Using Config file: ", viper.ConfigFileUsed())
-
-	if viper.GetBool("debug") {
-		logrus.SetLevel(logrus.DebugLevel)
-		logrus.Warn("Comment service is Running in Debug Mode")
-		return
-	}
-	logrus.SetLevel(logrus.InfoLevel)
-	logrus.Warn("Comment service is Running in Production Mode")
-	logrus.SetFormatter(&logrus.JSONFormatter{})
-}
-
-// NewTimeOutContext is timeout duration
-func NewTimeOutContext() time.Duration {
-	timeoutContext := time.Duration(viper.GetInt("contextTimeout")) * time.Second
-	return timeoutContext
-}
-
-// NewDbConn generate new database connection
-func NewDbConn() (*sql.DB, error) {
-	// DATABASE
-	dbHost := viper.GetString(`database.host`)
-	dbPort := viper.GetString(`database.port`)
-	dbUser := viper.GetString(`database.user`)
-	dbPass := viper.GetString(`database.pass`)
-	dbName := viper.GetString(`database.name`)
-	connection := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
-	val := url.Values{}
-	val.Add("parseTime", "1")
-	val.Add("loc", "Asia/Jakarta")
-	dsn := fmt.Sprintf("%s?%s", connection, val.Encode())
-	return sql.Open(`mysql`, dsn)
-}
-
-func initHTTPServiceDependecies() {
-	dbConn, err := NewDbConn()
-
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
-	}
-	err = dbConn.Ping()
-	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
-	}
+	cobra.OnInitialize(library.InitConfig)
+	rootCmd.AddCommand(httpCmd)
+	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(projectCmd)
+	rootCmd.AddCommand(mysqlCmd)
 }

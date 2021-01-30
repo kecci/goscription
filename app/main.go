@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/abyanjksatu/goscription/app/cmd"
-	_ "github.com/abyanjksatu/goscription/docs"
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/kecci/goscription/api/docs"
+	"github.com/kecci/goscription/app/cmd"
 )
 
 // @title Goscription Example API

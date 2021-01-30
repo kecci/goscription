@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	repoHandler "github.com/abyanjksatu/goscription/internal/database/mysql"
-	"github.com/abyanjksatu/goscription/models"
+	repoHandler "github.com/kecci/goscription/internal/database/mysql"
+	"github.com/kecci/goscription/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"

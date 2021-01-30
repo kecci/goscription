@@ -21,7 +21,7 @@ Some features & libraries used on this template:
 
 * Clone the Repos
 ```bash
-$ git clone https://github.com/abyanjksatu/goscription.git
+$ git clone https://github.com/kecci/goscription.git
 ```
 
 ## Command

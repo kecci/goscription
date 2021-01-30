@@ -1,11 +1,13 @@
 package cmd
 
 import (
-	"github.com/abyanjksatu/goscription/internal/controller"
-	"github.com/abyanjksatu/goscription/internal/database"
-	"github.com/abyanjksatu/goscription/internal/outbound"
-	"github.com/abyanjksatu/goscription/internal/server"
-	"github.com/abyanjksatu/goscription/internal/service"
+	"github.com/kecci/goscription/internal/controller"
+	"github.com/kecci/goscription/internal/database"
+	"github.com/kecci/goscription/internal/library/db"
+	"github.com/kecci/goscription/internal/outbound"
+	"github.com/kecci/goscription/internal/server"
+	"github.com/kecci/goscription/internal/service"
+	"github.com/kecci/goscription/util"
 	"github.com/spf13/cobra"
 	"go.uber.org/fx"
 )
@@ -29,8 +31,8 @@ func init() {
 func inject() fx.Option {
 	return fx.Options(
 		fx.Provide(
-			NewTimeOutContext,
-			NewDbConn,
+			util.NewTimeOutContext,
+			db.NewMysqlDB,
 		),
 		server.Module,
 		database.Module,

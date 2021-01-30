@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/abyanjksatu/goscription/internal/service"
-	"github.com/abyanjksatu/goscription/util"
+	"github.com/kecci/goscription/internal/service"
+	"github.com/kecci/goscription/util"
 	"github.com/labstack/echo/v4"
 )
 
@@ -59,8 +59,8 @@ func (a *userController) GetByID(c echo.Context) error {
 
 //UserRequest user body request
 type UserRequest struct {
-	Name   string `json:"name" validate:"required"`
-	Email string `json:"email" validate:"required"`
+	Name     string `json:"name" validate:"required"`
+	Email    string `json:"email" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
 
@@ -84,8 +84,8 @@ func (a *userController) Store(c echo.Context) error {
 	}
 
 	userParam := service.UserParam{
-		Name: userRequest.Name,
-		Email: userRequest.Email,
+		Name:     userRequest.Name,
+		Email:    userRequest.Email,
 		Password: userRequest.Password,
 	}
 

@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 
-	"github.com/abyanjksatu/goscription/internal/service"
-	"github.com/abyanjksatu/goscription/mocks"
-	"github.com/abyanjksatu/goscription/models"
-	"github.com/abyanjksatu/goscription/util"
+	"github.com/kecci/goscription/internal/service"
+	"github.com/kecci/goscription/mocks"
+	"github.com/kecci/goscription/models"
+	"github.com/kecci/goscription/util"
 )
 
 func TestFetch(t *testing.T) {

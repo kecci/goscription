@@ -3,10 +3,10 @@ package server
 import (
 	"context"
 
-	"github.com/abyanjksatu/goscription/internal/middleware"
+	"github.com/kecci/goscription/internal/middleware"
+	"github.com/kecci/goscription/models"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"go.uber.org/fx"
 )
@@ -15,7 +15,7 @@ import (
 var Module = fx.Provide(NewServer)
 
 //NewServer initialize new server
-func NewServer(lc fx.Lifecycle) *echo.Echo {
+func NewServer(lc fx.Lifecycle, config models.Config) *echo.Echo {
 	instance := echo.New()
 
 	// Middleware
@@ -31,7 +31,7 @@ func NewServer(lc fx.Lifecycle) *echo.Echo {
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			logrus.Print("Starting HTTP server.")
-			go instance.Start(viper.GetString("server.address"))
+			go instance.Start(config.Server.Address)
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {

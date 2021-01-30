@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/abyanjksatu/goscription/internal/outbound"
-	"github.com/abyanjksatu/goscription/models"
+	"github.com/kecci/goscription/internal/outbound"
+	"github.com/kecci/goscription/models"
 )
 
 type domainService struct {

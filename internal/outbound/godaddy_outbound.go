@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/abyanjksatu/goscription/models"
+	"github.com/kecci/goscription/models"
 	"github.com/spf13/viper"
 )
 

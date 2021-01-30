@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	models "github.com/abyanjksatu/goscription/models"
+	models "github.com/kecci/goscription/models"
 	mock "github.com/stretchr/testify/mock"
 )
 

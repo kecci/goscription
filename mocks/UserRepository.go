@@ -5,7 +5,7 @@ package mocks
 import (
 	context "context"
 
-	models "github.com/abyanjksatu/goscription/models"
+	models "github.com/kecci/goscription/models"
 	mock "github.com/stretchr/testify/mock"
 )
 

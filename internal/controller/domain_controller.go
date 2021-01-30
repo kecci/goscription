@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/abyanjksatu/goscription/internal/service"
+	"github.com/kecci/goscription/internal/service"
 	"github.com/labstack/echo/v4"
 )
 
