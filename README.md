@@ -1,7 +1,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/kecci/goscription)](https://goreportcard.com/report/github.com/kecci/goscription)
 # Goscription
 
-Goscription is a sample of template RESTful API gateway
+Goscription is a sample of template RESTful API Project
 
 ## Features
 
