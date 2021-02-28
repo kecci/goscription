@@ -15,8 +15,8 @@ all:
 .PHONY: lint-prepare
 lint-prepare:
 	@echo "Preparing Linter"
-ifeq (,$(wildcard ./bin/golangci-lint))
-	curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s latest
+ifeq (,$(shell which golangci-lint))
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin latest
 else
 	@echo "golangci-lint already installed"
 endif
@@ -25,7 +25,7 @@ endif
 .PHONY: lint l
 lint l:
 	@make lint-prepare
-	./bin/golangci-lint run -v \
+	golangci-lint run -v \
 		--exclude-use-default=false \
 		--disable-all \
 		--enable=goimports \
@@ -51,9 +51,9 @@ lint l:
 .PHONY: mockery-prepare
 mockery-prepare:
 	@echo "prepare mockery"
-ifeq (,$(wildcard ./bin/mockery))
+ifeq (,$(shell which mockery))
 	@echo "Installing mockery"
-	@go build -a -o ./bin/mockery github.com/vektra/mockery/v2/
+	@go get github.com/vektra/mockery/v2/
 else
 	@echo "mockery already installed"
 endif
@@ -63,7 +63,7 @@ endif
 mockery-generate:
 	@make mockery-prepare
 	@echo "start mockery all"
-	@./bin/mockery --all
+	@mockery --all
 
 ## test-unit, t: run all unit test
 .PHONY: test-unit t
@@ -114,8 +114,8 @@ docker-down:
 .PHONY: swagger-init-prepare
 swagger-init-prepare:
 	@echo "Prepare swag"
-ifeq (,$(wildcard ./bin/swag))
-	go build -a -o ./bin/swag github.com/swaggo/swag/cmd/swag
+ifeq (,$(shell which swag))
+	go get github.com/swaggo/swag/cmd/swag
 else
 	@echo "swag already installed"
 endif
@@ -123,8 +123,8 @@ endif
 .PHONY: swagger-validate-prepare
 swagger-validate-prepare:
 	@echo "Prepare go-swagger"
-ifeq (,$(wildcard ./bin/go-swagger))
-	go build -a -o ./bin/go-swagger github.com/go-swagger/go-swagger/cmd/swagger
+ifeq (,$(shell which swagger))
+	go get github.com/go-swagger/go-swagger/cmd/swagger
 else
 	@echo "go-swagger already installed"
 endif
@@ -134,7 +134,7 @@ endif
 swagger-init:
 	@make swagger-init-prepare
 	@echo "Start: Initialize swagger"
-	./bin/swag init -g app/main.go -o ./api/docs
+	swag init -g app/main.go -o ./api/docs
 	@echo "Done: initialize ./api/docs swagger"
 
 ## swagger-validate: validate swagger.yaml in folder ./api/docs
@@ -142,7 +142,7 @@ swagger-init:
 swagger-validate:
 	@make swagger-validate-prepare
 	@echo "Start: Validate swagger"
-	./bin/go-swagger validate api/docs/swagger.yaml
+	swagger validate api/docs/swagger.yaml
 	@echo "Done: Validate swagger"
 
 .PHONY: migrate-prepare
