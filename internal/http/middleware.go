@@ -39,10 +39,15 @@ func makeLogEntry(c echo.Context) *log.Entry {
 		})
 	}
 
+	// Sanitize uri
+	uri := c.Request().URL.String()
+	escapedUri := strings.Replace(uri, "\n", "", -1)
+	escapedUri = strings.Replace(escapedUri, "\r", "", -1)
+
 	return log.WithFields(log.Fields{
 		"at":     time.Now().Format("2006-01-02 15:04:05"),
 		"method": c.Request().Method,
-		"uri":    c.Request().URL.String(),
+		"uri":    escapedUri,
 		"ip":     c.Request().RemoteAddr,
 	})
 }
