@@ -18,6 +18,85 @@
     "host": "localhost:9090",
     "basePath": "/",
     "paths": {
+        "/address": {
+            "get": {
+                "description": "get address",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "address"
+                ],
+                "summary": "Show a Address",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "insert address",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "address"
+                ],
+                "summary": "Show a Address",
+                "parameters": [
+                    {
+                        "description": "address",
+                        "name": "address",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Address"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/articles": {
             "get": {
                 "description": "get string by ID",
@@ -251,9 +330,9 @@
                 }
             }
         },
-        "/domains": {
+        "/health": {
             "get": {
-                "description": "get string by ID",
+                "description": "get health",
                 "consumes": [
                     "application/json"
                 ],
@@ -261,82 +340,26 @@
                     "application/json"
                 ],
                 "tags": [
-                    "domains"
+                    "health"
                 ],
-                "summary": "Show a Domains",
+                "summary": "Show a Health",
                 "responses": {
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseError"
+                            "$ref": "#/definitions/models.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseError"
+                            "$ref": "#/definitions/models.BaseResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/controller.ResponseError"
-                        }
-                    }
-                }
-            }
-        },
-        "/domains/available": {
-            "get": {
-                "description": "get string by ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "domains"
-                ],
-                "summary": "Show a Domains Available",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "domain name",
-                        "name": "domain",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.DomainAvailableResponse"
-                        },
-                        "headers": {
-                            "Token": {
-                                "type": "string",
-                                "description": "qwerty"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/controller.ResponseError"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/controller.ResponseError"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/controller.ResponseError"
+                            "$ref": "#/definitions/models.BaseResponse"
                         }
                     }
                 }
@@ -476,26 +499,67 @@
                 }
             }
         },
-        "models.DomainAvailableResponse": {
+        "models.Address": {
+            "type": "object",
+            "required": [
+                "address_full",
+                "address_title",
+                "user_id"
+            ],
+            "properties": {
+                "address_full": {
+                    "type": "string"
+                },
+                "address_title": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "district_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "primary": {
+                    "type": "boolean"
+                },
+                "subdistrict_name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "zip_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.BaseResponse": {
             "type": "object",
             "properties": {
-                "available": {
-                    "type": "boolean"
-                },
-                "currency": {
+                "code": {
                     "type": "string"
                 },
-                "definitive": {
-                    "type": "boolean"
+                "data": {},
+                "error": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
-                "domain": {
+                "message": {
                     "type": "string"
-                },
-                "period": {
-                    "type": "integer"
-                },
-                "price": {
-                    "type": "integer"
                 }
             }
         }

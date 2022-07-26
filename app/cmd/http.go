@@ -29,7 +29,7 @@ func inject() fx.Option {
 		fx.Provide(
 			library.NewConfig,
 			utility.NewTimeOutContext,
-			db.NewMysqlDB,
+			db.NewDB,
 		),
 		repository.Module,
 		service.Module,

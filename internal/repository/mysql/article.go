@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/kecci/goscription/internal/library/db"
 	"github.com/kecci/goscription/models"
 	"github.com/kecci/goscription/utility"
 	"github.com/sirupsen/logrus"
@@ -28,11 +29,11 @@ type mysqlArticleRepository struct {
 }
 
 // NewArticleRepository will create an object that represent the article.Repository interface
-func NewArticleRepository(conn *sql.DB) ArticleRepository {
-	if conn == nil {
+func NewArticleRepository(DB db.Database) ArticleRepository {
+	if DB.Mysql == nil {
 		panic("Database Connections is nil")
 	}
-	return &mysqlArticleRepository{conn}
+	return &mysqlArticleRepository{DB.Mysql}
 }
 
 func (m *mysqlArticleRepository) fetch(ctx context.Context, query string, args ...interface{}) (result []models.Article, err error) {
