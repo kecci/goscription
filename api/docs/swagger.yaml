@@ -28,20 +28,48 @@ definitions:
     - name
     - password
     type: object
-  models.DomainAvailableResponse:
+  models.Address:
     properties:
-      available:
-        type: boolean
-      currency:
+      address_full:
         type: string
-      definitive:
-        type: boolean
-      domain:
+      address_title:
         type: string
-      period:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      district_name:
+        type: string
+      id:
         type: integer
-      price:
+      primary:
+        type: boolean
+      subdistrict_name:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+      user_id:
         type: integer
+      zip_code:
+        type: string
+    required:
+    - address_full
+    - address_title
+    - user_id
+    type: object
+  models.BaseResponse:
+    properties:
+      code:
+        type: string
+      data: {}
+      error:
+        items:
+          type: string
+        type: array
+      message:
+        type: string
     type: object
 host: localhost:9090
 info:
@@ -57,6 +85,58 @@ info:
   title: Goscription Example API
   version: "1.0"
 paths:
+  /address:
+    get:
+      consumes:
+      - application/json
+      description: get address
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: Show a Address
+      tags:
+      - address
+    post:
+      consumes:
+      - application/json
+      description: insert address
+      parameters:
+      - description: address
+        in: body
+        name: address
+        required: true
+        schema:
+          $ref: '#/definitions/models.Address'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.BaseResponse'
+      summary: Show a Address
+      tags:
+      - address
   /articles:
     delete:
       consumes:
@@ -212,66 +292,29 @@ paths:
       summary: Update an Article
       tags:
       - articles
-  /domains:
+  /health:
     get:
       consumes:
       - application/json
-      description: get string by ID
+      description: get health
       produces:
       - application/json
       responses:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/controller.ResponseError'
+            $ref: '#/definitions/models.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/controller.ResponseError'
+            $ref: '#/definitions/models.BaseResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/controller.ResponseError'
-      summary: Show a Domains
+            $ref: '#/definitions/models.BaseResponse'
+      summary: Show a Health
       tags:
-      - domains
-  /domains/available:
-    get:
-      consumes:
-      - application/json
-      description: get string by ID
-      parameters:
-      - description: domain name
-        in: query
-        name: domain
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          headers:
-            Token:
-              description: qwerty
-              type: string
-          schema:
-            $ref: '#/definitions/models.DomainAvailableResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/controller.ResponseError'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/controller.ResponseError'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/controller.ResponseError'
-      summary: Show a Domains Available
-      tags:
-      - domains
+      - health
   /user:
     post:
       consumes:

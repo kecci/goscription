@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/kecci/goscription/internal/library/db"
 	"github.com/kecci/goscription/models"
 	"github.com/kecci/goscription/utility"
 	"github.com/sirupsen/logrus"
@@ -24,11 +25,11 @@ type mysqlUserRepository struct {
 }
 
 // NewUserRepository will create an object that represent the article.Repository interface
-func NewUserRepository(conn *sql.DB) UserRepository {
-	if conn == nil {
+func NewUserRepository(DB db.Database) UserRepository {
+	if DB.Mysql == nil {
 		panic("Database Connections is nil")
 	}
-	return &mysqlUserRepository{conn}
+	return &mysqlUserRepository{DB.Mysql}
 }
 
 func (m *mysqlUserRepository) Store(ctx context.Context, a *models.User) (err error) {

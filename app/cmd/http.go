@@ -5,7 +5,6 @@ import (
 	"github.com/kecci/goscription/internal/http"
 	"github.com/kecci/goscription/internal/library"
 	"github.com/kecci/goscription/internal/library/db"
-	"github.com/kecci/goscription/internal/outbound"
 	"github.com/kecci/goscription/internal/repository"
 	"github.com/kecci/goscription/internal/service"
 	"github.com/kecci/goscription/utility"
@@ -30,9 +29,8 @@ func inject() fx.Option {
 		fx.Provide(
 			library.NewConfig,
 			utility.NewTimeOutContext,
-			db.NewMysqlDB,
+			db.NewDB,
 		),
-		outbound.Module,
 		repository.Module,
 		service.Module,
 		controller.Module,

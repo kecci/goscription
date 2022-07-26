@@ -8,7 +8,7 @@ Goscription is a sample of template RESTful API Project
 Some features & libraries used on this template:
 1. REST API (**labstack/echo**)
 2. Dependency Injection (**uber-go/fx**)
-3. Message Streams: Pub/Sub, Kafka, RabbitMQ, etc (**ThreeDotsLabs/watermill**) [Soon]
+3. NSQ Messaging (**segmentio/nsq-go**)
 4. Custom CLI (**spf13/cobra**)
 5. Custom Config File (**spf13/viper**)
 6. SQL Generator (**squirrel**)
@@ -17,6 +17,8 @@ Some features & libraries used on this template:
 9. Mock Generator (**vektra/mockery**)
 10. Custom Logger (**sirupsen/logrus**)
 11. Dockerize an Application (**docker**)
+12. Circuit Breaker (**hystrix-go/hystrix** && **eapache/go-resiliency**)
+13. Message Streams: Pub/Sub, Kafka, RabbitMQ, etc (**ThreeDotsLabs/watermill**) [Soon]
 
 ## Installation
 
@@ -183,6 +185,27 @@ func main() {
 ```
 
 You can see more about swag annotation in here: https://github.com/swaggo/swag.
+
+## Benchmark
+Using https://github.com/wg/wrk
+
+Script:
+```sh
+wrk -t8 -c256 -d30s http://localhost:9090/health
+```
+
+Output:
+```sh
+Running 30s test @ http://localhost:9090/health
+  8 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    13.17ms   11.67ms 153.74ms   71.04%
+    Req/Sec     2.82k   660.71     6.40k    69.88%
+  675770 requests in 30.08s, 150.16MB read
+  Socket errors: connect 0, read 121, write 0, timeout 0
+Requests/sec:  22464.24
+Transfer/sec:      4.99MB
+```
 
 ## Sources
 This template is inspired & modified from https://github.com/golangid/menekel

@@ -7,6 +7,6 @@ import (
 // Module for service module
 var Module = fx.Provide(
 	NewArticleService,
-	NewDomainService,
 	NewUserService,
+	NewHealthService,
 )
